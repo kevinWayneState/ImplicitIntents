@@ -3,9 +3,11 @@ package com.example.android;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ShareCompat;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -88,5 +90,22 @@ public class MainActivity extends AppCompatActivity {
                 .setChooserTitle("Share this text with: ")
                 .setText(txt)
                 .startChooser();
+    }
+
+    public void takePhoto(View view) {
+        //Create a new Intent with Intent.ACTION_IMAGE_CAPTURE as the action
+        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        //Make sure that the Intent resolved successfully
+        //If so, startActivity(), otherwise log an error message
+        if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+            try {
+                startActivity(pictureIntent);
+            } catch (ActivityNotFoundException error) {
+                // display error state to the user
+            }
+        } else {
+            Log.d("ImplicitIntents", "Can't handle this intent!");
+        }
     }
 }
